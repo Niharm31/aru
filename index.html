@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Aru — Buddhu Billi Universe 🐱💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+font-family:'Segoe UI',sans-serif;
+background:#060015;
+color:#eae6ff;
+overflow-x:hidden;
+}
+
+/* 🌊 Animated Waves */
+.waves{
+position:fixed;
+inset:0;
+background:linear-gradient(120deg,#12003b,#24004f,#003366,#12003b);
+background-size:400% 400%;
+animation:waves 18s ease infinite;
+z-index:-4;
+}
+@keyframes waves{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+}
+
+/* ✨ Stars */
+.stars{
+position:fixed;
+inset:0;
+background:
+radial-gradient(2px 2px at 40px 60px,#fff,transparent),
+radial-gradient(1px 1px at 200px 200px,#9dd,transparent),
+radial-gradient(2px 2px at 400px 300px,#ffd,transparent);
+animation:stars 140s linear infinite;
+z-index:-3;
+}
+@keyframes stars{to{background-position:-3000px 3000px;}}
+
+.app{max-width:560px;margin:auto;padding:30px;}
+
+h1{
+text-align:center;
+color:#ff9bd6;
+text-shadow:0 0 40px #ff70c0;
+animation:glow 3s infinite alternate;
+}
+@keyframes glow{to{text-shadow:0 0 70px #ff9bd6;}}
+
+/* Chapters */
+.chapter{
+background:rgba(255,255,255,.08);
+border-radius:34px;
+padding:32px;
+margin:40px 0;
+box-shadow:0 0 28px rgba(180,120,255,.4);
+opacity:.25;
+filter:blur(2px);
+transition:1s;
+}
+.chapter.active{opacity:1;filter:blur(0);}
+
+.story{text-align:center;font-size:1.15rem;line-height:1.9;}
+
+/* Buttons */
+button{
+background:linear-gradient(135deg,#ff70c0,#7b5cff);
+border:none;
+padding:15px 32px;
+border-radius:50px;
+font-size:1rem;
+color:white;
+cursor:pointer;
+box-shadow:0 0 18px rgba(255,150,220,.6);
+transition:.35s;
+}
+button:hover{transform:scale(1.06);}
+
+/* Mystery Cards */
+.mysteryGrid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:16px;
+margin-top:20px;
+}
+.mysteryCard{
+background:rgba(255,255,255,.12);
+backdrop-filter:blur(12px);
+border-radius:24px;
+padding:30px 20px;
+text-align:center;
+font-size:1.1rem;
+cursor:pointer;
+color:transparent;
+box-shadow:0 0 18px rgba(180,120,255,.4);
+position:relative;
+transition:.6s;
+}
+.mysteryCard::after{
+content:"Tap ✨";
+position:absolute;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#ffd6ff;
+}
+.mysteryCard.revealed{
+color:#ffd6ff;
+background:linear-gradient(135deg,rgba(255,180,220,.25),rgba(140,110,255,.25));
+box-shadow:0 0 35px #b28cff;
+}
+.mysteryCard.revealed::after{display:none;}
+
+/* Game */
+.gameArea{
+position:relative;
+height:220px;
+margin-top:20px;
+border-radius:20px;
+background:rgba(255,255,255,.05);
+overflow:hidden;
+}
+.fallingHeart{
+position:absolute;
+font-size:30px;
+cursor:pointer;
+animation:fall linear;
+filter:drop-shadow(0 0 12px #ff9bd6);
+}
+@keyframes fall{from{top:-40px;}to{top:260px;}}
+.score{text-align:center;color:#ff9bd6;margin-top:12px;}
+
+.winMsg{
+display:none;
+text-align:center;
+font-size:1.3rem;
+color:#ffd6ff;
+margin-top:18px;
+}
+
+/* Final Note */
+.finalNote{
+display:none;
+margin-top:25px;
+background:linear-gradient(135deg,rgba(255,180,220,.15),rgba(140,110,255,.15));
+padding:30px;
+border-radius:28px;
+font-size:1.1rem;
+line-height:1.9;
+color:#ffd6ff;
+text-align:center;
+box-shadow:0 0 35px rgba(255,150,220,.5);
+animation:fadeNote 1.2s ease forwards;
+}
+@keyframes fadeNote{
+from{opacity:0;transform:translateY(20px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+/* Click Effects */
+.ripple{
+position:fixed;
+width:18px;height:18px;
+border-radius:50%;
+border:2px solid rgba(255,180,220,.9);
+pointer-events:none;
+animation:ripple .7s forwards;
+}
+@keyframes ripple{to{transform:scale(10);opacity:0;}}
+
+.particle{
+position:fixed;width:6px;height:6px;border-radius:50%;
+background:linear-gradient(45deg,#ff9bd6,#7b5cff,#5ce1ff);
+pointer-events:none;
+animation:particle 1s forwards;
+}
+@keyframes particle{to{transform:translate(var(--x),var(--y));opacity:0;}}
+</style>
+</head>
+
+<body>
+
+<div class="waves"></div>
+<div class="stars"></div>
+
+<div class="app">
+
+<h1>🐱 Aru — Buddhu Billi Universe 💖</h1>
+
+<div class="chapter active" id="c1">
+<p class="story">Tum jab message karti ho na… life soft ho jaati hai 🤍</p>
+<button onclick="unlock(2)">Next ✨</button>
+</div>
+
+<div class="chapter" id="c2">
+<p class="story">Tum dramatic ho, main overthinker hoon — best combo 😄</p>
+
+<div class="mysteryGrid">
+<div class="mysteryCard" onclick="reveal(this)">Tum meri comfort ho 🤍</div>
+<div class="mysteryCard" onclick="reveal(this)">Tum bina effort special ho ✨</div>
+<div class="mysteryCard" onclick="reveal(this)">Tum meri hasi ho 😄</div>
+<div class="mysteryCard" onclick="reveal(this)">Bestie forever ♾️</div>
+</div>
+
+<button onclick="unlock(3)">Next ✨</button>
+</div>
+
+<div class="chapter" id="c3">
+<p class="story">Tum meri buddhu billi 🐱 aur meri safe place 💖</p>
+<button onclick="unlock(4)">Play game 🎮</button>
+</div>
+
+<div class="chapter" id="c4">
+<p class="story">Catch 10 hearts 💖</p>
+<div class="gameArea" id="game"></div>
+<div class="score">Score: <span id="score">0</span>/10</div>
+<div class="winMsg" id="win">You won 🎉</div>
+<button id="toChoice" style="display:none" onclick="unlock(5)">Next ✨</button>
+</div>
+
+<div class="chapter" id="c5">
+<p class="story">Besties forever? 🐱💖</p>
+<button onclick="yesForever()">YES 💗</button>
+<button id="noBtn" onclick="runNo()">NO 😈</button>
+<p id="foreverAns" class="story"></p>
+<button id="toFinal" style="display:none" onclick="unlock(6)">Final ✨</button>
+</div>
+
+<div class="chapter" id="c6">
+<p class="story">Final message unlock karo 💌</p>
+<button onclick="revealFinalNote()">Finally 💖</button>
+
+<div id="finalNote" class="finalNote">
+Aru 🤍  
+
+Sach bolu… tum sirf meri bestie nahi ho.  
+Tum meri comfort ho.  
+
+Jab life heavy ho jaati hai,  
+jab sab confusing lagta hai,  
+jab tum thak jaati ho strong banne se —  
+tumhe strong rehne ki zarurat nahi hai.  
+
+Main hoon.  
+
+Chahe tum happy ho, excited ho, overthinking mode me ho,  
+ya bina wajah sad ho —  
+main tumhare saath rahunga.  
+
+Ups ho ya downs,  
+chaos ho ya silence,  
+late night talks ho ya random fights —  
+main kahin nahi jaa raha.  
+
+Tum bas message kar dena.  
+Tum kabhi akeli nahi ho.  
+
+Bestie forever mere liye sirf line nahi — promise hai.  
+
+Aur main promises todta nahi 🤍  
+
+— Tumhara rasmalai brain 😌🐱
+</div>
+
+</div>
+
+</div>
+
+<script>
+function unlock(n){
+document.getElementById("c"+n).classList.add("active");
+document.getElementById("c"+n).scrollIntoView({behavior:"smooth"});
+}
+function reveal(card){card.classList.add("revealed");}
+
+/* Game */
+const game=document.getElementById("game");
+let score=0;
+let interval=setInterval(spawnHeart,700);
+
+function spawnHeart(){
+let h=document.createElement("div");
+h.className="fallingHeart";
+h.innerHTML="💖";
+h.style.left=Math.random()*260+"px";
+h.style.animationDuration=(Math.random()*2+2)+"s";
+h.onclick=()=>{
+score++;
+document.getElementById("score").innerText=score;
+h.remove();
+if(score>=10){
+clearInterval(interval);
+document.getElementById("win").style.display="block";
+document.getElementById("toChoice").style.display="block";
+}
+};
+game.appendChild(h);
+setTimeout(()=>h.remove(),4000);
+}
+
+/* Yes No */
+function yesForever(){
+document.getElementById("foreverAns").innerText="Certified forever besties 🐱💖";
+document.getElementById("toFinal").style.display="block";
+}
+function runNo(){
+let b=document.getElementById("noBtn");
+b.style.transform=`translate(${Math.random()*120}px,${Math.random()*80}px)`;
+}
+
+function revealFinalNote(){
+document.getElementById("finalNote").style.display="block";
+}
+
+/* Click Effects */
+document.addEventListener("click",e=>{
+createRipple(e.clientX,e.clientY);
+createParticles(e.clientX,e.clientY);
+});
+document.addEventListener("touchstart",e=>{
+let t=e.touches[0];
+createRipple(t.clientX,t.clientY);
+createParticles(t.clientX,t.clientY);
+});
+function createRipple(x,y){
+let r=document.createElement("div");
+r.className="ripple";
+r.style.left=x+"px";
+r.style.top=y+"px";
+document.body.appendChild(r);
+setTimeout(()=>r.remove(),700);
+}
+function createParticles(x,y){
+for(let i=0;i<10;i++){
+let p=document.createElement("div");
+p.className="particle";
+p.style.left=x+"px";
+p.style.top=y+"px";
+p.style.setProperty("--x",(Math.random()*120-60)+"px");
+p.style.setProperty("--y",(Math.random()*120-60)+"px");
+document.body.appendChild(p);
+setTimeout(()=>p.remove(),1000);
+}
+}
+</script>
+
+</body>
+</html>
